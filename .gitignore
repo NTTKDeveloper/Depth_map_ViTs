@@ -1,0 +1,9 @@
+# Bỏ qua các thư viện và dependencies (Node.js, Python, ...)
+__pycache__/
+
+#Hai thư mục data
+datasets_nyu/
+datasets_SUN-RGBD 2D/
+
+#Thư mục model
+model/
