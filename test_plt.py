@@ -18,7 +18,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Load mô hình nếu có, nếu không khởi tạo mới
-    model_path = "model/depth_model_revolt.pth"
+    model_path = "model/depth_model.pth"
     os.makedirs("model", exist_ok=True)
 
     model = DepthVisionTransformer()
