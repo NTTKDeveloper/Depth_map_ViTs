@@ -160,8 +160,8 @@ class DepthDataset(Dataset):
 # -----------------------------------------------------
 def main():
     # Thiết lập đường dẫn và biến đổi dữ liệu
-    train_image_dir = "./datasets_nyu/rgb_images"
-    train_depth_dir = "./datasets_nyu/depth_maps"
+    train_image_dir = "./datasets_nyu+SUN-RGBD-2D/rgb_images"
+    train_depth_dir = "./datasets_nyu+SUN-RGBD-2D/depth_maps"
     
     val_image_dir = "./datasets_SUN-RGBD 2D/rgb_images"
     val_depth_dir = "./datasets_SUN-RGBD 2D/depth_maps"

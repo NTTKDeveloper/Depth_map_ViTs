@@ -35,8 +35,9 @@ if __name__ == "__main__":
     model.eval()  # Chế độ inference
     
     # Đường dẫn tới ảnh đầu vào
-    image_path = "./datasets_SUN-RGBD 2D/rgb_images/1.jpg"
-    depth_path = "./datasets_SUN-RGBD 2D/depth_maps/1.png"
+    n = 2
+    image_path = f"./datasets_SUN-RGBD 2D/rgb_images/{n}.jpg"
+    depth_path = f"./datasets_SUN-RGBD 2D/depth_maps/{n}.png"
     
     # Load ảnh bằng OpenCV
     img_cv = cv2.imread(image_path)

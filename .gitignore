@@ -2,8 +2,9 @@
 __pycache__/
 
 #Hai thư mục data
-datasets_nyu/
+datasets_nyu+SUN-RGBD-2D/
 datasets_SUN-RGBD 2D/
 
 #Thư mục model
 model/
+alpha = 0.9.txt
