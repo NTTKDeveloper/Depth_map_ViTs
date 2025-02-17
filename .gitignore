@@ -4,7 +4,11 @@ __pycache__/
 #Hai thư mục data
 datasets_nyu+SUN-RGBD-2D/
 datasets_SUN-RGBD 2D/
+datasets_nyu/
+datasets_SUN-RGBD 2D_origin/
 
 #Thư mục model
 model/
-alpha = 0.9.txt
+
+*.txt
+*.rar

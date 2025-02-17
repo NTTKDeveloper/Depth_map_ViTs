@@ -35,7 +35,7 @@ if __name__ == "__main__":
     model.eval()  # Chế độ inference
     
     # Đường dẫn tới ảnh đầu vào
-    n = 2
+    n = 300
     image_path = f"./datasets_SUN-RGBD 2D/rgb_images/{n}.jpg"
     depth_path = f"./datasets_SUN-RGBD 2D/depth_maps/{n}.png"
     

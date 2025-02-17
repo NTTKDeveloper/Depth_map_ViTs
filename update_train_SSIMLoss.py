@@ -149,9 +149,9 @@ class DepthDataset(Dataset):
                 image = self.transform(image)
             depth_path = os.path.join(self.depth_dir, self.depth_filenames[idx])
             depth = cv2.imread(depth_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+            depth = cv2.resize(depth, self.target_size, interpolation=cv2.INTER_LINEAR)
             depth = depth / 255.0
             depth = np.clip(depth, 1e-6, 1.0)
-            depth = cv2.resize(depth, self.target_size, interpolation=cv2.INTER_LINEAR)
             depth = torch.tensor(depth).unsqueeze(0)
             return image, depth
 

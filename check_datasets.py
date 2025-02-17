@@ -51,8 +51,11 @@ class DepthDataset(Dataset):
         # Đọc và xử lý depth map
         depth_path = os.path.join(self.depth_dir, self.depth_filenames[idx])
         depth = cv2.imread(depth_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
+        depth = cv2.resize(depth, self.target_size, interpolation=cv2.INTER_LINEAR)
         depth = depth / 255.0           # Chuẩn hóa về 0-1
+        # print(depth.min())
         depth = np.clip(depth, 1e-6, 1.0) # Tránh giá trị 0 tuyệt đối
+        # print(depth.min())
         
         # Resize depth map về kích thước target (ví dụ: 384x384) dùng cv2
         depth = cv2.resize(depth, self.target_size, interpolation=cv2.INTER_LINEAR)
@@ -61,8 +64,8 @@ class DepthDataset(Dataset):
         return image, depth
 
 # Thiết lập dữ liệu
-image_dir = "./datasets_nyu/rgb_images"
-depth_dir = "./datasets_nyu/depth_maps"
+image_dir = "./datasets_SUN-RGBD 2D/rgb_images"
+depth_dir = "./datasets_SUN-RGBD 2D/depth_maps"
 transform = transforms.Compose([
     transforms.Resize((384, 384)),
     transforms.ToTensor()
@@ -83,8 +86,8 @@ def show_sample(dataset):
     print(image_np.shape)
     print(depth_np.shape)
     
-    for depth in depth_np:
-        print(depth)
+    # for depth in depth_np:
+    #     print(depth)
     
     # Chuyển đổi ảnh RGB sang BGR cho OpenCV
     image_bgr = (image_np * 255).astype(np.uint8)
