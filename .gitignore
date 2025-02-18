@@ -10,5 +10,8 @@ datasets_SUN-RGBD 2D_origin/
 #Thư mục model
 model/
 
+*.xlsx
+log.xlsx
+
 *.txt
 *.rar

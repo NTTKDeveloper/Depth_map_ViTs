@@ -166,16 +166,26 @@ def main():
     val_image_dir = "./datasets_SUN-RGBD 2D/rgb_images"
     val_depth_dir = "./datasets_SUN-RGBD 2D/depth_maps"
 
-    transform = transforms.Compose([
+    transform_train = transforms.Compose([
+        transforms.Resize((384, 384)),  # Resize ảnh về kích thước cố định
+        # transforms.RandomHorizontalFlip(p=0.5),  # Lật ngang với xác suất 50%
+        # transforms.RandomRotation(degrees=10),  # Xoay ảnh trong khoảng [-10, 10] độ
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),  # Điều chỉnh màu sắc ngẫu nhiên
+        transforms.ToTensor(),  # Chuyển đổi sang tensor
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Chuẩn hóa
+    ])
+
+    transform_val = transforms.Compose([
         transforms.Resize((384, 384)),
-        transforms.ToTensor()
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Chuẩn hóa
     ])
 
     # Dataset train (cache vào RAM)
-    train_dataset = DepthDataset(train_image_dir, train_depth_dir, transform, target_size=(384, 384), cache_data=True)
+    train_dataset = DepthDataset(train_image_dir, train_depth_dir, transform_train, target_size=(384, 384), cache_data=True)
 
     # Dataset validation (KHÔNG cache vào RAM để tiết kiệm bộ nhớ)
-    val_dataset = DepthDataset(val_image_dir, val_depth_dir, transform, target_size=(384, 384), cache_data=True)
+    val_dataset = DepthDataset(val_image_dir, val_depth_dir, transform_val, target_size=(384, 384), cache_data=True)
 
     # DataLoader cho tập train
     train_dataloader = DataLoader(train_dataset, batch_size=3, shuffle=True, num_workers=0, pin_memory=True)
@@ -198,11 +208,11 @@ def main():
     model.to(device)
 
     # Sử dụng CombinedLoss thay vì chỉ SILogLoss
-    criterion = CombinedLoss(alpha=0.7)
-    optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-4)
+    criterion = CombinedLoss(alpha=0.5)
+    optimizer = optim.Adam(model.parameters(), lr=0.00001, weight_decay=1e-4)
 
     model.train()
-    num_epochs = 1
+    num_epochs = 10
     for epoch in range(num_epochs):
         total_loss = 0.0
         total_loss_ssim = 0.0
