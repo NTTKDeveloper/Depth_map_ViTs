@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 import os
 from PIL import Image
-from model import DepthVisionTransformer  # Giả sử mô hình của bạn được định nghĩa trong file này
+from model_skip_connect import DepthVisionTransformer  # Giả sử mô hình của bạn được định nghĩa trong file này
 from tqdm import tqdm  # Import tqdm để tạo thanh tiến trình
 from datetime import datetime
 
@@ -207,9 +207,11 @@ def main():
     val_dataloader = DataLoader(val_dataset, batch_size=3, shuffle=False, num_workers=0, pin_memory=True)
 
     # Khởi tạo hoặc load mô hình
-    model_path = "model/depth_model.pth"
+    model_path = "model/new_model_with_skip.pth"
     os.makedirs("model", exist_ok=True)
-    model = DepthVisionTransformer()
+    model = DepthVisionTransformer(img_size=384, patch_size=16, in_chans=3,
+                 embed_dim=768, depth=12, num_heads=12, mlp_ratio=4.0,
+                 dropout=0.5, attention_dropout=0.0)
     if os.path.exists(model_path):
         model.load_state_dict(torch.load(model_path))
         print("Loaded existing model.")
@@ -222,10 +224,10 @@ def main():
 
     # Sử dụng CombinedLoss thay vì chỉ SILogLoss
     criterion = CombinedLoss(alpha=0.3)
-    optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=0.00005, weight_decay=1e-4)
 
     model.train()
-    num_epochs = 20
+    num_epochs = 5
     for epoch in range(num_epochs):
         total_loss = 0.0
         total_loss_ssim = 0.0
@@ -288,9 +290,9 @@ def main():
     print("Training Complete! Model saved.")
     print_current_time()
 
-    # Sau khi huấn luyện xong, tự động tắt máy (lệnh cho Windows 11)
-    print("Training done! System will automatically shut down in a few seconds...")
-    os.system("shutdown /s /t 0")
+    # # Sau khi huấn luyện xong, tự động tắt máy (lệnh cho Windows 11)
+    # print("Training done! System will automatically shut down in a few seconds...")
+    # os.system("shutdown /s /t 0")
 
 # -----------------------------------------------------
 # Bảo vệ điểm vào khi chạy trên Windows

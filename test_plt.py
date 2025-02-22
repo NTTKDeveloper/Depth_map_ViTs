@@ -8,7 +8,7 @@ from PIL import Image
 import torchvision.transforms as transforms
 
 # Model Depth Map ViTs
-from model import DepthVisionTransformer
+from model_skip_connect import DepthVisionTransformer
 
 # ========================================================================
 # Main: Load ảnh, chuẩn bị input và hiển thị kết quả depth map
@@ -18,10 +18,12 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Load mô hình nếu có, nếu không khởi tạo mới
-    model_path = "model/depth_model.pth"
+    model_path = "model/new_model_with_skip.pth"
     os.makedirs("model", exist_ok=True)
 
-    model = DepthVisionTransformer()
+    model = DepthVisionTransformer(img_size=384, patch_size=16, in_chans=3,
+                 embed_dim=768, depth=12, num_heads=12, mlp_ratio=4.0,
+                 dropout=0.5, attention_dropout=0.0)
     
     if os.path.exists(model_path):
         model.load_state_dict(torch.load(model_path, map_location=device))
@@ -35,11 +37,11 @@ if __name__ == "__main__":
     model.eval()
     
     # Đường dẫn tới ảnh đầu vào
-    # n = 501
+    # n = 1005
     # image_path = f"./datasets_SUN-RGBD 2D/rgb_images/{n}.jpg"
     # depth_path = f"./datasets_SUN-RGBD 2D/depth_maps/{n}.png"
 
-    n = 1
+    n = 2
     image_path = f"./datasets_nyu/rgb_images/{n}.png"
     depth_path = f"./datasets_nyu/depth_maps/{n}.png"
     
